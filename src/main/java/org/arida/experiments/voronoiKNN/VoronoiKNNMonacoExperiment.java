@@ -28,10 +28,21 @@ public class VoronoiKNNMonacoExperiment {
 		Logger logger = LoggerFactory.getLogger(MonacoExperiment.class);
 
 		Graph testGraph = new GraphGenerator().generateMonaco();
-		POIImporter.generateRandomPoIs(testGraph, 25);
+		POIImporter.generateRandomPoIs(testGraph, 100);
 		Long source = testGraph.getNodeId(43.72842465479131, 7.414896579419745);
 
-		List<Integer> numberOfNeighbors = new ArrayList<>(Arrays.asList(1, 2, 4, 8, 16, 32, 64, 128, 194));
+		List<Integer> numberOfNeighbors = new ArrayList<>();
+
+		int j = 1;
+		while (j <= testGraph.getPOIs().size()) {
+			numberOfNeighbors.add(j);
+			j = j * 2;
+		}
+
+		if (testGraph.getPOIs().size() % 2 != 0) {
+			numberOfNeighbors.add(testGraph.getPOIs().size());
+		}
+
 		int numberOfRepetitions = 1;
 
 		double averagePreprocessingTime = 0;

@@ -1,11 +1,9 @@
 package org.arida.experiments.CHKNN;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.arida.experiments.MonacoExperiment;
-import org.graphast.graphgenerator.GraphGenerator;
+import org.arida.graphgenerator.GraphGenerator;
 import org.graphast.importer.POIImporter;
 import org.graphast.model.contraction.CHGraph;
 import org.graphast.query.knnch.lowerbounds.KNNCHSearch;
@@ -14,32 +12,36 @@ import org.slf4j.LoggerFactory;
 
 import com.graphhopper.util.StopWatch;
 
-public class CHKNNMonacoExperiment {
+public class CHKNNAndorraExperiment {
 
-	private CHKNNMonacoExperiment() {
+	private CHKNNAndorraExperiment() {
 
 		throw new IllegalAccessError("Utility class");
 
 	}
-
+	
 	public static void main(String[] args) {
 
-		Logger logger = LoggerFactory.getLogger(CHKNNMonacoExperiment.class);
+		Logger logger = LoggerFactory.getLogger(CHKNNAndorraExperiment.class);
 
-		CHGraph testGraph = new GraphGenerator().generateMonacoCHWithPoI();
+		CHGraph testGraph = new GraphGenerator().generateAndorraCH();
 
 		StopWatch preprocessingSW = new StopWatch();
 
 		preprocessingSW.start();
+		logger.info("Starting to prepare nodes.");
 		testGraph.prepareNodes();
+		logger.info("Finishing nodes preparation.");
+		logger.info("Starting to contract nodes.");
 		testGraph.contractNodes();
 		preprocessingSW.stop();
+		logger.info("Finishing nodes contraction.");
 
-		logger.info("Starting to generate PoI'S");
-		POIImporter.generateRandomPoIs(testGraph, 100);
+		logger.info("Starting to generate PoI'S.");
+		POIImporter.generateRandomPoIs(testGraph, 25);
 		logger.info("Finishing PoI's generation.");
 
-		Long source = testGraph.getNodeId(43.72842465479131, 7.414896579419745);
+		Long source = 100l;
 		int numberOfRepetitions = 100;
 
 		List<Integer> numberOfNeighbors = new ArrayList<>();
@@ -77,5 +79,4 @@ public class CHKNNMonacoExperiment {
 		logger.info("preprocessingTime = {} seconds", preprocessingSW.getSeconds());
 
 	}
-
 }
