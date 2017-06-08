@@ -30,17 +30,17 @@ public class CHKNNMonacoExperiment {
 
 		StopWatch preprocessingSW = new StopWatch();
 
-		preprocessingSW.start();
-		testGraph.prepareNodes();
-		testGraph.contractNodes();
-		preprocessingSW.stop();
+//		preprocessingSW.start();
+//		testGraph.prepareNodes();
+//		testGraph.contractNodes();
+//		preprocessingSW.stop();
 
 		logger.info("Starting to generate PoI'S");
-		POIImporter.generateRandomPoIs(testGraph, 100);
+		POIImporter.generateRandomPoIs(testGraph, 75);
 		logger.info("Finishing PoI's generation.");
 
 		Long source = testGraph.getNodeId(43.72842465479131, 7.414896579419745);
-		int numberOfRepetitions = 100;
+		int numberOfRepetitions = 1;
 
 		List<Integer> numberOfNeighbors = new ArrayList<>();
 
