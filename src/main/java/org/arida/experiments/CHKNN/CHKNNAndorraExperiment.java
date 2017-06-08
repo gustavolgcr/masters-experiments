@@ -38,7 +38,7 @@ public class CHKNNAndorraExperiment {
 		logger.info("Finishing nodes contraction.");
 
 		logger.info("Starting to generate PoI'S.");
-		POIImporter.generateRandomPoIs(testGraph, 25);
+		POIImporter.generateRandomPoIs(testGraph, 100);
 		logger.info("Finishing PoI's generation.");
 
 		Long source = 100l;
