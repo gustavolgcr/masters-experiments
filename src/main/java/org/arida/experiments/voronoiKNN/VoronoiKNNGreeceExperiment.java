@@ -3,7 +3,6 @@ package org.arida.experiments.voronoiKNN;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import org.graphast.graphgenerator.GraphGenerator;
 import org.arida.experiments.MonacoExperiment;
@@ -16,9 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import com.graphhopper.util.StopWatch;
 
-public class VoronoiKNNMonacoExperiment {
+public class VoronoiKNNGreeceExperiment {
 
-	private VoronoiKNNMonacoExperiment() {
+	private VoronoiKNNGreeceExperiment() {
 
 		throw new IllegalAccessError("Utility class");
 
@@ -28,11 +27,9 @@ public class VoronoiKNNMonacoExperiment {
 
 		Logger logger = LoggerFactory.getLogger(MonacoExperiment.class);
 
-		int missedSeaches = 0;
-		
-		Graph testGraph = new GraphGenerator().generateMonacoCHWithPoI();
-		POIImporter.generateRandomPoIs(testGraph, 75);
-//		Long source = testGraph.getNodeId(43.72842465479131, 7.414896579419745);
+		Graph testGraph = new GraphGenerator().generateGreeceCH();
+		POIImporter.generateRandomPoIs(testGraph, 1);
+		Long source = testGraph.getNodeId(37.98255073985198,23.724620574518006);
 
 		List<Integer> numberOfNeighbors = new ArrayList<>();
 
@@ -42,11 +39,11 @@ public class VoronoiKNNMonacoExperiment {
 			j = j * 2;
 		}
 
-		if (testGraph.getPOIs().size() % (j/2) != 0) {
+		if (testGraph.getPOIs().size() % 2 != 0) {
 			numberOfNeighbors.add(testGraph.getPOIs().size());
 		}
 
-		int numberOfRepetitions = 100;
+		int numberOfRepetitions = 1;
 
 		double averagePreprocessingTime = 0;
 
@@ -57,19 +54,16 @@ public class VoronoiKNNMonacoExperiment {
 
 			for (int i = 0; i < numberOfRepetitions; i++) {
 
-				Random randomGenerator = new Random();
-				int source = randomGenerator.nextInt((int)testGraph.getNumberOfNodes()-1);
-				
 				StopWatch voronoiPreprocessingSW = new StopWatch();
 
 				testGraph.reverseGraph();
 
 				VoronoiDiagram voronoiDiagram = new VoronoiDiagram(testGraph);
-//				logger.info("Starting diagram creation");
+				logger.info("Starting diagram creation");
 				voronoiPreprocessingSW.start();
 				voronoiDiagram.createDiagram();
 				voronoiPreprocessingSW.stop();
-//				logger.info("Finishing diagram creation: {} seconds.", voronoiPreprocessingSW.getSeconds());
+				logger.info("Finishing diagram creation");
 
 				testGraph.reverseGraph();
 
@@ -77,16 +71,7 @@ public class VoronoiKNNMonacoExperiment {
 				StopWatch voronoiExecutionSW = new StopWatch();
 
 				voronoiExecutionSW.start();
-				
-				try {
-					knn.executeKNN(source, k);
-				} catch (Exception e) {
-					missedSeaches++;
-					continue;
-				}
-				
-				
-				
+				knn.executeKNN(source, k);
 				voronoiExecutionSW.stop();
 
 				averageExecutionTime += voronoiExecutionSW.getSeconds();
@@ -101,7 +86,6 @@ public class VoronoiKNNMonacoExperiment {
 
 		averagePreprocessingTime = averagePreprocessingTime / (numberOfRepetitions * numberOfNeighbors.size());
 		logger.info("averagePreprocessingTime = {}", averagePreprocessingTime);
-		logger.info("Missed Searches = {}, Total Number of Searches = {}", missedSeaches, numberOfNeighbors.size()*numberOfRepetitions);
 
 	}
 }

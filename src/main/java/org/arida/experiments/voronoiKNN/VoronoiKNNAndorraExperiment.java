@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import com.graphhopper.util.StopWatch;
 
-public class VoronoiKNNMonacoExperiment {
+public class VoronoiKNNAndorraExperiment {
 
-	private VoronoiKNNMonacoExperiment() {
+	private VoronoiKNNAndorraExperiment() {
 
 		throw new IllegalAccessError("Utility class");
 
@@ -26,13 +26,13 @@ public class VoronoiKNNMonacoExperiment {
 
 	public static void main(String[] args) {
 
-		Logger logger = LoggerFactory.getLogger(MonacoExperiment.class);
+		Logger logger = LoggerFactory.getLogger(VoronoiKNNAndorraExperiment.class);
 
 		int missedSeaches = 0;
 		
-		Graph testGraph = new GraphGenerator().generateMonacoCHWithPoI();
+		Graph testGraph = new GraphGenerator().generateAndorra();
 		POIImporter.generateRandomPoIs(testGraph, 75);
-//		Long source = testGraph.getNodeId(43.72842465479131, 7.414896579419745);
+//		Long source = testGraph.getNodeId(42.5653867624414,1.5978422373050951);
 
 		List<Integer> numberOfNeighbors = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class VoronoiKNNMonacoExperiment {
 			numberOfNeighbors.add(testGraph.getPOIs().size());
 		}
 
-		int numberOfRepetitions = 100;
+		int numberOfRepetitions = 10 ;
 
 		double averagePreprocessingTime = 0;
 
@@ -69,7 +69,7 @@ public class VoronoiKNNMonacoExperiment {
 				voronoiPreprocessingSW.start();
 				voronoiDiagram.createDiagram();
 				voronoiPreprocessingSW.stop();
-//				logger.info("Finishing diagram creation: {} seconds.", voronoiPreprocessingSW.getSeconds());
+//				logger.info("Finishing diagram creation.");
 
 				testGraph.reverseGraph();
 
@@ -77,16 +77,12 @@ public class VoronoiKNNMonacoExperiment {
 				StopWatch voronoiExecutionSW = new StopWatch();
 
 				voronoiExecutionSW.start();
-				
 				try {
 					knn.executeKNN(source, k);
 				} catch (Exception e) {
 					missedSeaches++;
 					continue;
 				}
-				
-				
-				
 				voronoiExecutionSW.stop();
 
 				averageExecutionTime += voronoiExecutionSW.getSeconds();

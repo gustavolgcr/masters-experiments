@@ -1,4 +1,4 @@
-package org.arida.experiments.CHKNN;
+package org.arida.experiments.BiKNNR;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import com.graphhopper.util.StopWatch;
 
-public class CHKNNMonacoExperiment {
+public class BiKNNRGreeceExperiment {
 
-	private CHKNNMonacoExperiment() {
+	private BiKNNRGreeceExperiment() {
 
 		throw new IllegalAccessError("Utility class");
 
@@ -23,23 +23,18 @@ public class CHKNNMonacoExperiment {
 
 	public static void main(String[] args) {
 
-		Logger logger = LoggerFactory.getLogger(CHKNNMonacoExperiment.class);
+		Logger logger = LoggerFactory.getLogger(BiKNNRGreeceExperiment.class);
 
-		CHGraph testGraph = new GraphGenerator().generateMonacoCHWithPoI();
+		CHGraph testGraph = new GraphGenerator().generateGreeceCH();
 
 		StopWatch preprocessingSW = new StopWatch();
 
-//		preprocessingSW.start();
-//		testGraph.prepareNodes();
-//		testGraph.contractNodes();
-//		preprocessingSW.stop();
-
 		logger.info("Starting to generate PoI'S");
-		POIImporter.generateRandomPoIs(testGraph, 100);
+		POIImporter.generateRandomPoIs(testGraph, 1);
 		logger.info("Finishing PoI's generation.");
 
-		Long source = testGraph.getNodeId(43.72842465479131, 7.414896579419745);
-		int numberOfRepetitions = 100;
+		Long source = testGraph.getNodeId(37.98255073985198,23.724620574518006);
+		int numberOfRepetitions = 1;
 
 		List<Integer> numberOfNeighbors = new ArrayList<>();
 
